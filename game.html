@@ -36,7 +36,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#1a0f0a;color:var(--in
 /* ===== تحكّم اللمس ===== */
 #joy{display:none;position:fixed;width:120px;height:120px;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);pointer-events:none;z-index:3}
 #knob{position:absolute;left:35px;top:35px;width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:0 4px 14px rgba(0,0,0,.4)}
-#jump{display:none;position:fixed;left:max(18px,env(safe-area-inset-left));bottom:calc(22px + var(--sb));width:78px;height:78px;border-radius:50%;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff;font:700 15px 'Changa';backdrop-filter:blur(8px);z-index:4;align-items:center;justify-content:center;letter-spacing:.5px}
+#jump{display:none;position:fixed;right:max(18px,env(safe-area-inset-right));bottom:calc(22px + var(--sb));width:78px;height:78px;border-radius:50%;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff;font:700 15px 'Changa';backdrop-filter:blur(8px);z-index:4;align-items:center;justify-content:center;letter-spacing:.5px}
 .touch #jump{display:flex}
 #jump:active{background:rgba(255,255,255,.3)}
 #act{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(30px + var(--sb));min-width:200px;padding:14px 26px;border:0;border-radius:999px;background:linear-gradient(180deg,#ffe2a8,#ffb457);color:#1a0f0a;font:700 18px 'Changa';box-shadow:0 12px 34px rgba(255,160,60,.45),0 0 0 3px rgba(255,255,255,.25);z-index:4;align-items:center;justify-content:center;gap:10px;animation:pulse 1.6s infinite}
@@ -81,7 +81,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#1a0f0a;color:var(--in
   <div class="card" id="region"><div id="rname">المرعى</div><div id="rsub"></div><div id="dots"></div></div>
   <div id="hint"></div>
   <div id="toast"></div>
-  <div id="keys">الأسهم / WASD للحركة · Shift للجري · مسافة للقفز · E للتفاعل · اسحب بالماوس للنظر</div>
+  <div id="keys">▲ ▼ للمشي · ◀ ▶ للدوران (أو WASD) · Shift للجري · مسافة للقفز · E للتفاعل · اسحب بالماوس للنظر</div>
 </div>
 <div id="joy"><div id="knob"></div></div>
 <button id="jump" type="button">JUMP</button>
