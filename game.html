@@ -2,27 +2,93 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a0f0a">
 <title>رحلة الزكاة — العالم</title>
 <style>
-@font-face{font-family:'Lalezar';src:url(assets__fonts__lalezar.woff2) format('woff2')}
-@font-face{font-family:'Changa';font-weight:500;src:url(assets__fonts__changa-m.woff2) format('woff2')}
-html,body{margin:0;height:100%;background:radial-gradient(120% 80% at 50% 100%,#3a1d10,#120906 70%);color:#fff7ee;font-family:'Changa',system-ui,sans-serif;display:flex;align-items:center;justify-content:center;text-align:center}
-h1{font-family:'Lalezar',serif;font-weight:400;font-size:52px;margin:0 0 6px}
-p{opacity:.8;margin:6px 0;font-size:18px}
-b{color:var(--accent,#ffd166)}
-a{display:inline-block;margin-top:22px;color:#1a0f0a;background:linear-gradient(180deg,#ffe2a8,#ffb457);padding:12px 26px;border-radius:14px;text-decoration:none;font-size:18px}
+@font-face{font-family:'Lalezar';src:url(assets__fonts__lalezar.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Changa';font-weight:500;src:url(assets__fonts__changa-m.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Changa';font-weight:700;src:url(assets__fonts__changa-b.woff2) format('woff2');font-display:swap}
+:root{--accent:#35d6ff;--ink:#fff7ee;--glass:rgba(24,14,10,.55);--line:rgba(255,235,210,.22);--sb:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html,body{margin:0;height:100%;overflow:hidden;background:#1a0f0a;color:var(--ink);font-family:'Changa',system-ui,sans-serif;overscroll-behavior:none}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+/* ===== HUD ===== */
+#hud{position:fixed;inset:0;pointer-events:none}
+.card{position:absolute;background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:16px;padding:10px 14px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+#who{top:calc(12px + var(--st));right:12px;display:flex;align-items:center;gap:10px}
+#hrobot{width:14px;height:14px;border-radius:50%;box-shadow:0 0 12px currentColor}
+#hname{font-weight:700;font-size:16px}
+#score{font-family:'Lalezar',serif;font-size:26px;line-height:1;color:#ffd27a;margin-right:6px}
+#score::after{content:' نقطة';font-family:'Changa';font-size:12px;opacity:.7}
+#region{top:calc(12px + var(--st));left:12px;min-width:160px;text-align:left;direction:rtl}
+#rname{font-family:'Lalezar',serif;font-size:26px;line-height:1;color:#fff3e0}
+#rsub{font-size:12px;opacity:.75;margin-top:2px}
+#dots{display:flex;gap:6px;margin-top:8px;justify-content:flex-end}
+#dots i{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.18);border:1px solid var(--line)}
+#dots i.on{background:#9bd88a;box-shadow:0 0 10px #9bd88a}
+#hint{position:absolute;top:calc(70px + var(--st));left:50%;transform:translateX(-50%);font-size:15px;color:#ffe3b0;text-shadow:0 2px 8px #000;white-space:nowrap}
+#toast{position:absolute;top:calc(100px + var(--st));left:50%;transform:translate(-50%,-10px);background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:10px 18px;font-size:16px;opacity:0;transition:.35s;backdrop-filter:blur(12px);max-width:90%;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#keys{position:absolute;bottom:calc(14px + var(--sb));left:50%;transform:translateX(-50%);font-size:12px;opacity:.6;white-space:nowrap}
+.touch #keys{display:none}
+/* ===== تحكّم اللمس ===== */
+#joy{display:none;position:fixed;width:120px;height:120px;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);pointer-events:none;z-index:3}
+#knob{position:absolute;left:35px;top:35px;width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:0 4px 14px rgba(0,0,0,.4)}
+#jump{display:none;position:fixed;left:max(18px,env(safe-area-inset-left));bottom:calc(22px + var(--sb));width:78px;height:78px;border-radius:50%;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff;font:700 15px 'Changa';backdrop-filter:blur(8px);z-index:4;align-items:center;justify-content:center;letter-spacing:.5px}
+.touch #jump{display:flex}
+#jump:active{background:rgba(255,255,255,.3)}
+#act{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(30px + var(--sb));min-width:200px;padding:14px 26px;border:0;border-radius:999px;background:linear-gradient(180deg,#ffe2a8,#ffb457);color:#1a0f0a;font:700 18px 'Changa';box-shadow:0 12px 34px rgba(255,160,60,.45),0 0 0 3px rgba(255,255,255,.25);z-index:4;align-items:center;justify-content:center;gap:10px;animation:pulse 1.6s infinite}
+#act b{font-family:'Lalezar';font-size:20px}
+@keyframes pulse{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.05)}}
+.touch #act{bottom:calc(110px + var(--sb))}
+/* ===== لوحة السؤال ===== */
+#panel{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%) scale(.96);width:min(560px,calc(100% - 28px));max-height:calc(100% - 40px);overflow:auto;background:rgba(20,12,8,.86);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--line);border-radius:22px;padding:22px 22px 18px;box-shadow:0 30px 90px rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:.28s cubic-bezier(.2,.8,.2,1);z-index:6}
+#panel.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+#pclose{position:absolute;left:12px;top:10px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-size:18px;cursor:pointer}
+.qtag{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--c,#ffd27a);border:1px solid var(--c,#ffd27a);border-radius:999px;padding:3px 12px;margin-bottom:12px}
+.qtag b{font-family:'Lalezar';font-size:16px}
+.qtext{font-size:21px;line-height:1.7;margin-bottom:16px;text-wrap:balance}
+.opts{display:grid;gap:10px}
+.opts button,.go,.pad button{appearance:none;font:inherit;font-size:18px;color:var(--ink);background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:14px;padding:13px 16px;cursor:pointer;text-align:right;transition:.15s;line-height:1.6}
+.opts button:hover{background:rgba(255,255,255,.14)}
+.opts button.ok{background:rgba(120,220,140,.25);border-color:#9bd88a}
+.opts button.no{background:rgba(240,90,80,.25);border-color:#ff8a7a}
+.go{display:block;width:100%;margin-top:14px;text-align:center;background:linear-gradient(180deg,#ffe2a8,#ffb457);color:#1a0f0a;border:0;font-weight:700}
+.note{font-size:14px;opacity:.8;margin:6px 0 8px}
+.res .big{font-family:'Lalezar';font-size:34px;line-height:1.1;margin:6px 0 10px}
+.res.ok .big{color:#9bd88a}.res.no .big{color:#ff9a8a}
+.res .why{font-size:17px;line-height:1.7;opacity:.92}
+.lock{display:flex;flex-direction:column;align-items:center;gap:12px}
+.lcd{font-family:'Lalezar';font-size:44px;letter-spacing:6px;background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:12px;padding:6px 26px;min-width:180px;text-align:center;color:#c7a6ff}
+.pad{display:grid;grid-template-columns:repeat(3,72px);gap:8px}
+.pad button{text-align:center;font-size:22px;padding:10px 0}
+/* ===== التحميل ===== */
+#loader{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:radial-gradient(120% 80% at 50% 100%,#3a1d10,#120906 70%);z-index:9;transition:opacity .9s}
+#loader.hide{opacity:0;pointer-events:none}
+#loader h1{font-family:'Lalezar',serif;font-weight:400;font-size:56px;margin:0;color:#fff3e2}
+#track{width:min(320px,70%);height:6px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}
+#bar{height:100%;width:0;background:linear-gradient(90deg,#ffb457,#ffe2a8);transition:width .3s}
+#ltext{font-size:15px;opacity:.75}
+#ltips{font-size:13px;opacity:.55;max-width:340px;text-align:center;line-height:1.7}
 </style>
 </head>
 <body>
-<div>
-  <h1>رحلة الزكاة</h1>
-  <p>أهلًا يا <b id="n">…</b> — روبوتك <b id="r">…</b> جاهز.</p>
-  <p>العالمُ يُبنى الآن… هذه شاشةُ الدخول فقط.</p>
-  <a href="index.html">العودة إلى شاشة الدخول</a>
+<canvas id="c"></canvas>
+<div id="hud">
+  <div class="card" id="who"><i id="hrobot"></i><span id="hname">…</span><span id="score">٠</span></div>
+  <div class="card" id="region"><div id="rname">المرعى</div><div id="rsub"></div><div id="dots"></div></div>
+  <div id="hint"></div>
+  <div id="toast"></div>
+  <div id="keys">الأسهم / WASD للحركة · Shift للجري · مسافة للقفز · E للتفاعل · اسحب بالماوس للنظر</div>
 </div>
-<script>
-try{ const p=JSON.parse(localStorage.getItem('zakat.player')||'{}'); document.getElementById('n').textContent=p.name||'بطل'; const names={noor:'نور',shihab:'شهاب',haris:'حارس',zumurrud:'زمرّد'}; document.getElementById('r').textContent=names[p.robot]||''; if(p.accent) document.documentElement.style.setProperty('--accent','#'+p.accent.toString(16).padStart(6,'0')); }catch(e){}
-</script>
+<div id="joy"><div id="knob"></div></div>
+<button id="jump" type="button">JUMP</button>
+<button id="act" type="button"><b>E</b><span>تفاعل</span></button>
+<div id="panel"><button id="pclose" type="button">✕</button><div id="pbody"></div></div>
+<div id="loader"><h1>رحلة الزكاة</h1><div id="track"><div id="bar"></div></div><div id="ltext">يُبنى العالم…</div><div id="ltips">امشِ على الدرب، وعند كلّ محطّةٍ مضيئة اضغطْ «تفاعل». الحارسُ عند البوّابة لا يفتحها إلّا بجوابٍ صحيح.</div></div>
+<script>window.__FLAT=1;</script>
+<script src="game.bundle.js"></script>
 </body>
 </html>
