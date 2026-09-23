@@ -34,7 +34,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#1a0f0a;color:var(--in
 #fps{font-size:11px;opacity:.6}#fps b{font-family:'Lalezar';font-size:14px;font-weight:400}
 #hint{position:absolute;top:calc(70px + var(--st));left:50%;transform:translateX(-50%);font-size:15px;color:#ffe3b0;text-shadow:0 2px 8px #000;white-space:nowrap}
 #toast{position:absolute;top:calc(100px + var(--st));left:50%;transform:translate(-50%,-10px);background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:10px 18px;font-size:16px;opacity:0;transition:.35s;backdrop-filter:blur(12px);max-width:90%;text-align:center}
-#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast{visibility:hidden}
+#toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
 #keys{position:absolute;bottom:calc(14px + var(--sb));left:50%;transform:translateX(-50%);font-size:12px;opacity:.6;white-space:nowrap}
 .touch #keys{display:none}
 /* ===== تحكّم اللمس ===== */
@@ -49,7 +50,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#1a0f0a;color:var(--in
 .touch #act{bottom:calc(110px + var(--sb))}
 /* ===== لوحة السؤال ===== */
 #panel{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%) scale(.96);width:min(560px,calc(100% - 28px));max-height:calc(100% - 40px);overflow:auto;background:rgba(20,12,8,.86);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--line);border-radius:22px;padding:22px 22px 18px;box-shadow:0 30px 90px rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:.28s cubic-bezier(.2,.8,.2,1);z-index:6}
-#panel.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+#panel{visibility:hidden}
+#panel.open{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
 #pclose{position:absolute;left:12px;top:10px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-size:18px;cursor:pointer}
 .qtag{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--c,#ffd27a);border:1px solid var(--c,#ffd27a);border-radius:999px;padding:3px 12px;margin-bottom:12px}
 .qtag b{font-family:'Lalezar';font-size:16px}
@@ -68,6 +70,10 @@ html,body{margin:0;height:100%;overflow:hidden;background:#1a0f0a;color:var(--in
 .lcd{font-family:'Lalezar';font-size:44px;letter-spacing:6px;background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:12px;padding:6px 26px;min-width:180px;text-align:center;color:#c7a6ff}
 .pad{display:grid;grid-template-columns:repeat(3,72px);gap:8px}
 .pad button{text-align:center;font-size:22px;padding:10px 0}
+/* بلا ضبابيّة خلفيّة في الجودة المتوسّطة والمنخفضة (مكلفة فوق الرسوم) */
+.nofx .card,.nofx #toast,.nofx #panel,.nofx #jump{backdrop-filter:none;-webkit-backdrop-filter:none}
+.nofx .card,.nofx #toast{background:rgba(24,14,10,.82)}
+.nofx #panel{background:rgba(20,12,8,.96)}
 /* ===== التحميل ===== */
 #loader{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:radial-gradient(120% 80% at 50% 100%,#3a1d10,#120906 70%);z-index:9;transition:opacity .9s}
 #loader.hide{opacity:0;pointer-events:none}
